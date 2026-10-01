@@ -1,0 +1,19 @@
+[Unit]
+Description=KijaniKiosk API Service
+After=network.target
+
+[Service]
+Type=simple
+User=kk-api
+Group=kk-api
+ExecStart=/opt/kijanikiosk/api/start.sh
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/kijanikiosk/api /var/log/kijanikiosk
+
+[Install]
+WantedBy=multi-user.target

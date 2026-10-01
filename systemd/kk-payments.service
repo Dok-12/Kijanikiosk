@@ -1,0 +1,28 @@
+[Unit]
+Description=KijaniKiosk Payments Service
+After=network.target
+
+[Service]
+Type=simple
+User=kk-payments
+Group=kk-payments
+ExecStart=/opt/kijanikiosk/payments/start.sh
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateDevices=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+LockPersonality=true
+MemoryDenyWriteExecute=true
+RestrictRealtime=true
+SystemCallArchitectures=native
+ReadWritePaths=/var/lib/kijanikiosk/payments /var/log/kijanikiosk
+
+[Install]
+WantedBy=multi-user.target

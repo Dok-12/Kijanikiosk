@@ -1,0 +1,19 @@
+[Unit]
+Description=KijaniKiosk Log Processing Service
+After=network.target
+
+[Service]
+Type=simple
+User=kk-logs
+Group=kk-logs
+ExecStart=/opt/kijanikiosk/logs/start.sh
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/log/kijanikiosk
+
+[Install]
+WantedBy=multi-user.target
