@@ -52,7 +52,7 @@ check_files() {
     log "Checking Bash syntax..."
     bash -n "$PROJECT_DIR/scripts/provision.sh"
 
-        if command -v systemd-analyze >/dev/null 2>&1; then
+    if command -v systemd-analyze >/dev/null 2>&1; then
         log "Checking systemd unit definitions..."
 
         local unit
@@ -60,8 +60,8 @@ check_files() {
             if systemd-analyze verify --man=no "$unit" 2>&1; then
                 log "Unit check passed: $(basename "$unit")"
             else
-                log "Unit check reported issues: $(basename "$unit")"
-                log "Check ExecStart paths and dependencies before deployment."
+                log "Unit template has unresolved deployment requirements: $(basename "$unit")"
+                log "Review ExecStart paths and dependencies before deployment."
             fi
         done
     else
@@ -81,7 +81,9 @@ audit_host() {
 
     log "Kernel: $(uname -r)"
     log "Root filesystem:"
-    df -h /    log "Memory:"
+    df -h /
+
+    log "Memory:"
     free -h
 
     log "Listening sockets:"
