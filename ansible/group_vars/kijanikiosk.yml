@@ -1,0 +1,15 @@
+kijanikiosk_root: /opt/kijanikiosk
+kijanikiosk_log_dir: /var/log/kijanikiosk
+kijanikiosk_api_state_dir: /var/lib/kijanikiosk/api
+kijanikiosk_payments_state_dir: /var/lib/kijanikiosk/payments
+
+kijanikiosk_users:
+  - kk-api
+  - kk-payments
+  - kk-logs
+
+kijanikiosk_packages:
+  - systemd
+  - logrotate
+  - rsyslog
+  - openssh-server

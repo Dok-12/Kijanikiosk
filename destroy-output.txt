@@ -1,0 +1,67 @@
+[0m[1mmodule.app_server["payments"].multipass_instance.this: Refreshing state... [name=kijanikiosk-payments][0m
+[0m[1mmodule.app_server["logs"].multipass_instance.this: Refreshing state... [name=kijanikiosk-logs][0m
+[0m[1mmodule.app_server["api"].multipass_instance.this: Refreshing state... [name=kijanikiosk-api][0m
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  [31m-[0m destroy[0m
+
+Terraform will perform the following actions:
+
+[1m  # module.app_server["api"].multipass_instance.this[0m will be [1m[31mdestroyed[0m
+[0m  [31m-[0m[0m resource "multipass_instance" "this" {
+      [31m-[0m[0m cloudinit_file = "./cloud-init/user-data.yaml" [90m-> null[0m[0m
+      [31m-[0m[0m cpus           = 1 [90m-> null[0m[0m
+      [31m-[0m[0m disk           = "5G" [90m-> null[0m[0m
+      [31m-[0m[0m image          = "24.04" [90m-> null[0m[0m
+      [31m-[0m[0m ipv4           = "10.219.245.31" [90m-> null[0m[0m
+      [31m-[0m[0m memory         = "1G" [90m-> null[0m[0m
+      [31m-[0m[0m name           = "kijanikiosk-api" [90m-> null[0m[0m
+    }
+
+[1m  # module.app_server["logs"].multipass_instance.this[0m will be [1m[31mdestroyed[0m
+[0m  [31m-[0m[0m resource "multipass_instance" "this" {
+      [31m-[0m[0m cloudinit_file = "./cloud-init/user-data.yaml" [90m-> null[0m[0m
+      [31m-[0m[0m cpus           = 1 [90m-> null[0m[0m
+      [31m-[0m[0m disk           = "5G" [90m-> null[0m[0m
+      [31m-[0m[0m image          = "24.04" [90m-> null[0m[0m
+      [31m-[0m[0m ipv4           = "10.219.245.86" [90m-> null[0m[0m
+      [31m-[0m[0m memory         = "1G" [90m-> null[0m[0m
+      [31m-[0m[0m name           = "kijanikiosk-logs" [90m-> null[0m[0m
+    }
+
+[1m  # module.app_server["payments"].multipass_instance.this[0m will be [1m[31mdestroyed[0m
+[0m  [31m-[0m[0m resource "multipass_instance" "this" {
+      [31m-[0m[0m cloudinit_file = "./cloud-init/user-data.yaml" [90m-> null[0m[0m
+      [31m-[0m[0m cpus           = 1 [90m-> null[0m[0m
+      [31m-[0m[0m disk           = "5G" [90m-> null[0m[0m
+      [31m-[0m[0m image          = "24.04" [90m-> null[0m[0m
+      [31m-[0m[0m ipv4           = "10.219.245.2" [90m-> null[0m[0m
+      [31m-[0m[0m memory         = "1G" [90m-> null[0m[0m
+      [31m-[0m[0m name           = "kijanikiosk-payments" [90m-> null[0m[0m
+    }
+
+[1mPlan:[0m [0m0 to add, 0 to change, 3 to destroy.
+
+Changes to Outputs:
+  [31m-[0m[0m api_ip       = "10.219.245.31" [90m-> null[0m[0m
+  [31m-[0m[0m logs_ip      = "10.219.245.86" [90m-> null[0m[0m
+  [31m-[0m[0m payments_ip  = "10.219.245.2" [90m-> null[0m[0m
+  [31m-[0m[0m server_ips   = {
+      [31m-[0m[0m api      = "10.219.245.31"
+      [31m-[0m[0m logs     = "10.219.245.86"
+      [31m-[0m[0m payments = "10.219.245.2"
+    } [90m-> null[0m[0m
+  [31m-[0m[0m ssh_commands = {
+      [31m-[0m[0m api      = "ssh ubuntu@10.219.245.31"
+      [31m-[0m[0m logs     = "ssh ubuntu@10.219.245.86"
+      [31m-[0m[0m payments = "ssh ubuntu@10.219.245.2"
+    } [90m-> null[0m[0m
+[0m[1mmodule.app_server["logs"].multipass_instance.this: Destroying... [name=kijanikiosk-logs][0m[0m
+[0m[1mmodule.app_server["payments"].multipass_instance.this: Destroying... [name=kijanikiosk-payments][0m[0m
+[0m[1mmodule.app_server["api"].multipass_instance.this: Destroying... [name=kijanikiosk-api][0m[0m
+[0m[1mmodule.app_server["api"].multipass_instance.this: Destruction complete after 1s[0m
+[0m[1mmodule.app_server["logs"].multipass_instance.this: Destruction complete after 1s[0m
+[0m[1mmodule.app_server["payments"].multipass_instance.this: Destruction complete after 2s[0m
+[0m[1m[32m
+Destroy complete! Resources: 3 destroyed.[0m

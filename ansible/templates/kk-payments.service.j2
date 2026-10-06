@@ -1,0 +1,40 @@
+[Unit]
+Description=KijaniKiosk Payments Service
+After=network.target
+
+[Service]
+Type=simple
+User={{ kijanikiosk_service_user }}
+Group={{ kijanikiosk_service_group }}
+ExecStart={{ kijanikiosk_root }}/{{ kijanikiosk_service_path }}/start.sh
+Restart=on-failure
+
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+LockPersonality=true
+MemoryDenyWriteExecute=true
+RestrictRealtime=true
+SystemCallArchitectures=native
+CapabilityBoundingSet=
+ProtectClock=true
+ProtectKernelLogs=true
+ProtectHostname=true
+ProtectProc=invisible
+ProcSubset=pid
+PrivateUsers=true
+RestrictNamespaces=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+UMask=0077
+SystemCallFilter=~@clock @cpu-emulation @debug @module @mount @obsolete @privileged @raw-io @reboot @resources @swap
+
+ReadWritePaths={{ kijanikiosk_state_dir }} {{ kijanikiosk_log_dir }}
+
+[Install]
+WantedBy=multi-user.target

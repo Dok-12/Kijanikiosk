@@ -1,0 +1,18 @@
+[Unit]
+Description=KijaniKiosk API Service
+After=network.target
+
+[Service]
+Type=simple
+User={{ kijanikiosk_service_user }}
+Group={{ kijanikiosk_service_group }}
+ExecStart={{ kijanikiosk_root }}/{{ kijanikiosk_service_path }}/start.sh
+Restart=on-failure
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths={{ kijanikiosk_state_dir }} {{ kijanikiosk_log_dir }}
+
+[Install]
+WantedBy=multi-user.target

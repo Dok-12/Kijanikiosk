@@ -1,0 +1,5 @@
+kijanikiosk_service_name: kk-logs
+kijanikiosk_service_user: kk-logs
+kijanikiosk_service_group: kk-logs
+kijanikiosk_service_path: logs
+kijanikiosk_state_dir: ""

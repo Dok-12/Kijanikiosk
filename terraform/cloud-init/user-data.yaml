@@ -1,0 +1,20 @@
+#cloud-config
+
+users:
+  - name: ubuntu
+    groups:
+      - sudo
+    shell: /bin/bash
+    sudo:
+      - "ALL=(ALL) NOPASSWD:ALL"
+    ssh_authorized_keys:
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFWWb3k9khU3SnAMcyP8n5aQvEUTxxkmCURoF67g4c+j kijanikiosk-week4
+
+ssh_pwauth: false
+disable_root: true
+
+packages:
+  - openssh-server
+
+runcmd:
+  - systemctl enable --now ssh

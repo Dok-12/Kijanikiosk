@@ -1,0 +1,5 @@
+kijanikiosk_service_name: kk-api
+kijanikiosk_service_user: kk-api
+kijanikiosk_service_group: kk-api
+kijanikiosk_service_path: api
+kijanikiosk_state_dir: /var/lib/kijanikiosk/api

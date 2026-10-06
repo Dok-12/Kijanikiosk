@@ -1,0 +1,13 @@
+# Terraform local files
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+*.tfvars.json
+
+# Local secrets
+.env
+.env.*
+
+# Ansible transient files
+*.retry

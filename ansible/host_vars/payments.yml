@@ -1,0 +1,5 @@
+kijanikiosk_service_name: kk-payments
+kijanikiosk_service_user: kk-payments
+kijanikiosk_service_group: kk-payments
+kijanikiosk_service_path: payments
+kijanikiosk_state_dir: /var/lib/kijanikiosk/payments

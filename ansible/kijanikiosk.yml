@@ -1,0 +1,163 @@
+---
+- name: Configure KijaniKiosk production servers
+  hosts: kijanikiosk
+  become: true
+
+  handlers:
+    - name: Reload systemd
+      ansible.builtin.systemd:
+        daemon_reload: true
+
+    - name: Restart KijaniKiosk service
+      ansible.builtin.systemd:
+        name: "{{ kijanikiosk_service_name }}"
+        state: restarted
+
+    - name: Restart systemd-journald
+      ansible.builtin.systemd:
+        name: systemd-journald
+        state: restarted
+
+  tasks:
+
+    # ------------------------------------------------------------
+    # Phase 1: Packages
+    # ------------------------------------------------------------
+    - name: "Phase 1 - Install required packages"
+      ansible.builtin.apt:
+        name: "{{ kijanikiosk_packages }}"
+        state: present
+        update_cache: true
+        cache_valid_time: 3600
+
+    # ------------------------------------------------------------
+    # Phase 2: Service accounts
+    # ------------------------------------------------------------
+    - name: "Phase 2 - Create KijaniKiosk service accounts"
+      ansible.builtin.user:
+        name: "{{ item }}"
+        system: true
+        shell: /usr/sbin/nologin
+        create_home: false
+        state: present
+      loop: "{{ kijanikiosk_users }}"
+
+    # ------------------------------------------------------------
+    # Phase 3: Directories
+    # ------------------------------------------------------------
+    - name: "Phase 3 - Create KijaniKiosk root directory"
+      ansible.builtin.file:
+        path: "{{ kijanikiosk_root }}"
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+
+    - name: "Phase 3 - Create service directory"
+      ansible.builtin.file:
+        path: "{{ kijanikiosk_root }}/{{ kijanikiosk_service_path }}"
+        state: directory
+        owner: "{{ kijanikiosk_service_user }}"
+        group: "{{ kijanikiosk_service_group }}"
+        mode: "0750"
+
+    - name: "Phase 3 - Create log directory"
+      ansible.builtin.file:
+        path: "{{ kijanikiosk_log_dir }}"
+        state: directory
+        owner: root
+        group: adm
+        mode: "0750"
+
+    - name: "Phase 3 - Create service state directory"
+      ansible.builtin.file:
+        path: "{{ kijanikiosk_state_dir }}"
+        state: directory
+        owner: "{{ kijanikiosk_service_user }}"
+        group: "{{ kijanikiosk_service_group }}"
+        mode: "0750"
+      when: kijanikiosk_state_dir | length > 0
+
+    # ------------------------------------------------------------
+    # Phase 4: Systemd
+    # ------------------------------------------------------------
+    - name: "Phase 4 - Install systemd service"
+      ansible.builtin.template:
+        src: "{{ kijanikiosk_service_path | replace('api', 'kk-api') | replace('payments', 'kk-payments') | replace('logs', 'kk-logs') }}.service.j2"
+        dest: "/etc/systemd/system/{{ kijanikiosk_service_name }}.service"
+        owner: root
+        group: root
+        mode: "0644"
+      notify:
+        - Reload systemd
+        - Restart KijaniKiosk service
+
+    - name: "Phase 4 - Create service start script"
+      ansible.builtin.copy:
+        dest: "{{ kijanikiosk_root }}/{{ kijanikiosk_service_path }}/start.sh"
+        content: |
+          #!/bin/bash
+          set -euo pipefail
+          exec /usr/bin/tail -f /dev/null
+        owner: "{{ kijanikiosk_service_user }}"
+        group: "{{ kijanikiosk_service_group }}"
+        mode: "0750"
+      notify:
+        - Restart KijaniKiosk service
+
+    - name: "Phase 4 - Enable and start KijaniKiosk service"
+      ansible.builtin.systemd:
+        name: "{{ kijanikiosk_service_name }}"
+        enabled: true
+        state: started
+
+    # ------------------------------------------------------------
+    # Phase 5: Firewall
+    # ------------------------------------------------------------
+    - name: "Phase 5 - Install firewall package"
+      ansible.builtin.apt:
+        name: ufw
+        state: present
+
+    - name: "Phase 5 - Allow SSH"
+      community.general.ufw:
+        rule: allow
+        port: "22"
+        proto: tcp
+
+    - name: "Phase 5 - Enable firewall"
+      community.general.ufw:
+        state: enabled
+        policy: deny
+
+    # ------------------------------------------------------------
+    # Phase 6: Journald
+    # ------------------------------------------------------------
+    - name: "Phase 6 - Create journald configuration directory"
+      ansible.builtin.file:
+        path: /etc/systemd/journald.conf.d
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+
+    - name: "Phase 6 - Configure persistent journald"
+      ansible.builtin.template:
+        src: journald.conf.j2
+        dest: /etc/systemd/journald.conf.d/10-kijanikiosk.conf
+        owner: root
+        group: root
+        mode: "0644"
+      notify:
+        - Restart systemd-journald
+
+    # ------------------------------------------------------------
+    # Phase 7: Logrotate
+    # ------------------------------------------------------------
+    - name: "Phase 7 - Configure logrotate"
+      ansible.builtin.template:
+        src: logrotate.conf.j2
+        dest: /etc/logrotate.d/kk-services
+        owner: root
+        group: root
+        mode: "0644"
